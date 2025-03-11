@@ -91,30 +91,7 @@ const technicalQuestionsSchema = new mongoose.Schema({
   },
 });
 
-// technicalScoresSchema
-
-const technicalScoresSchema = new mongoose.Schema({
-  user: {
-    type: mongoose.Schema.Types.ObjectId,
-    required: false,
-    ref: "User",
-  },
-  technicalScore: {
-    type: Number,
-    required: true,
-  },
-  totalQuestions: {
-    type: Number,
-    required: true,
-  },
-  technicalAnswers: [technicalAnswerSchema], // Array of user answers
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  },
-});
 //technicalAnswerSchema
-
 const technicalAnswerSchema = new mongoose.Schema({
   questionIndex: {
     type: Number,
@@ -136,6 +113,29 @@ const technicalAnswerSchema = new mongoose.Schema({
     type: Date,
     default: Date.now
   }
+});
+
+
+// technicalScoresSchema
+const technicalScoresSchema = new mongoose.Schema({
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: false,
+    ref: "User",
+  },
+  technicalScore: {
+    type: Number,
+    required: true,
+  },
+  totalQuestions: {
+    type: Number,
+    required: true,
+  },
+  technicalAnswers: [technicalAnswerSchema], // Array of user answers
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
 });
 
 // assignment Schema
