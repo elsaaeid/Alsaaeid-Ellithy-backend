@@ -215,6 +215,7 @@ const updateAssignment = asyncHandler(async (req, res) => {
       id: question.id || undefined, // Use existing ID or generate a new one
       question: question.question || "", // English question
       question_ar: question.question_ar || "", // Arabic question
+      code: question.code || "", // code
       options: Array.isArray(question.options) ? question.options : [], // English options
       options_ar: Array.isArray(question.options_ar) ? question.options_ar : [], // Arabic options
       correctAnswer: question.correctAnswer || "", // English correct answer
