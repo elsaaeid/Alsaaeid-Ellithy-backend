@@ -113,6 +113,11 @@ const blogSchema = new mongoose.Schema({
         required: false,
         trim: true,
     },
+    language: {
+        type: String,
+        required: false,
+        trim: true,
+    },
     description: {
         type: String,
         required: false,
@@ -152,6 +157,11 @@ const blogSchema = new mongoose.Schema({
                 trim: true,
             },
             code: {
+                type: String,
+                required: false,
+                trim: true,
+            },
+            language: {
                 type: String,
                 required: false,
                 trim: true,

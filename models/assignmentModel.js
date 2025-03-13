@@ -4,15 +4,19 @@ const mongoose = require("mongoose");
 const questionSchema = new mongoose.Schema({
     question: {
       type: String,
-      required: true
+      required: false,
     },
     question_ar: {
       type: String,
-      required: true
+      required: false,
     },
     code: {
       type: String,
-      required: true,
+      required: false,
+    },
+    language: {
+      type: String,
+      required: false,
     },
     options: {
       type: [String],
@@ -32,11 +36,11 @@ const questionSchema = new mongoose.Schema({
     },
     correctAnswer: {
       type: String,
-      required: true
+      required: false,
     },
     correctAnswer_ar: {
       type: String,
-      required: true   
+      required: false,
     },
 });
 
@@ -65,11 +69,11 @@ const scoreSchema = new mongoose.Schema({
   },
   score: {
     type: Number,
-    required: true,
+    required: false,
   },
   totalQuestions: {
     type: Number,
-    required: true,
+    required: false,
   },
   answers: [answerSchema], // Array of user answers
   createdAt: {
@@ -83,15 +87,15 @@ const scoreSchema = new mongoose.Schema({
 const technicalQuestionsSchema = new mongoose.Schema({
   technicalQuestion: {
     type: String,
-    required: true
+    required: false,
   },
   technicalQuestion_ar: {
     type: String,
-    required: true
+    required: false,
   },
   correctAnswer: {
     type: String,
-    required: true
+    required: false,
   },
 });
 
@@ -99,19 +103,19 @@ const technicalQuestionsSchema = new mongoose.Schema({
 const technicalAnswerSchema = new mongoose.Schema({
   questionIndex: {
     type: Number,
-    required: true,
+    required: false,
   },
   isCorrect: {
     type: Boolean,
-    required: true,
+    required: false,
   },
   technicalAnswer: {
     type: String,
-    required: true,
+    required: false,
   },
   language: {
     type: String,
-    required: true,
+    required: false,
   },
   createdAt: {
     type: Date,
@@ -129,11 +133,11 @@ const technicalScoresSchema = new mongoose.Schema({
   },
   technicalScore: {
     type: Number,
-    required: true,
+    required: false,
   },
   totalQuestions: {
     type: Number,
-    required: true,
+    required: false,
   },
   technicalAnswers: [technicalAnswerSchema], // Array of user answers
   createdAt: {

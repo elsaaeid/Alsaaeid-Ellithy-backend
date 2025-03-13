@@ -18,7 +18,8 @@ const createBlog = asyncHandler(async (req, res) => {
       description_ar, 
       tags,
       tags_ar,
-      code 
+      code,
+      language,
   } = req.body;
 
   // Log the incoming request body for debugging
@@ -102,6 +103,7 @@ const createBlog = asyncHandler(async (req, res) => {
       tags: JSON.parse(tags),
       tags_ar: JSON.parse(tags_ar),
       code,
+      language,
       image: fileData,
       blogItems: blogItems ? blogItems.map((item, index) => ({
           ...item,
@@ -196,6 +198,7 @@ const updateBlog = asyncHandler(async (req, res) => {
       tags,
       tags_ar, // Arabic tags
       code, 
+      language,
       blogItems 
   } = req.body;
   const { id } = req.params;
@@ -246,6 +249,7 @@ const updateBlog = asyncHandler(async (req, res) => {
           tags: JSON.parse(tags),
           tags_ar: JSON.parse(tags_ar),
           code,
+          language,
           image: Object.keys(fileData).length === 0 ? blog.image : fileData, // Use blog.image directly
           blogItems: blogItems || blog.blogItems,
       },
