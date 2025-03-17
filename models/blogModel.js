@@ -47,7 +47,7 @@ const commentSchema = new mongoose.Schema({
     },
     photo: {
         type: String,
-        required: [true, "Please add a photo"],
+        required: [false, "Please add a photo"],
         default: "https://i.ibb.co/4pDNDk1/avatar.png",
     },
     comment: {
