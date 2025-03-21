@@ -270,6 +270,7 @@ const sendAssignment = asyncHandler(async (req, res) => {
 
     // Ensure each answer has the required fields
     const validatedAnswers = parsedAnswers.map((answer) => ({
+      assignmentId: assignmentId,
       questionIndex: answer.questionIndex,
       selectedOption: answer.selectedOption,
       answer: answer.answer,
@@ -337,6 +338,7 @@ const sendTechnicalAssignment = asyncHandler(async (req, res) => {
 
     // Ensure each answer has the required fields
     const validatedAnswers = parsedAnswers.map((technicalAnswer) => ({
+      assignmentId: assignmentId,
       questionIndex: technicalAnswer.questionIndex,
       isCorrect: technicalAnswer.isCorrect !== undefined ? technicalAnswer.isCorrect : false,
       technicalAnswer: technicalAnswer.technicalAnswer,

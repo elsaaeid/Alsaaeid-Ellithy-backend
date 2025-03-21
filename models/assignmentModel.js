@@ -46,6 +46,11 @@ const questionSchema = new mongoose.Schema({
 
 // Answer Schema for storing user answers
 const answerSchema = new mongoose.Schema({
+  assignmentId: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+    ref: "Assignment", // Reference to the Assignment model
+  },
   questionIndex: {
     type: Number,
     required: true,
@@ -57,6 +62,10 @@ const answerSchema = new mongoose.Schema({
   isCorrect: {
     type: Boolean,
     required: true,
+  },
+  answer: {
+    type: String,
+    required: false,
   },
 });
 
@@ -101,6 +110,11 @@ const technicalQuestionsSchema = new mongoose.Schema({
 
 //technicalAnswerSchema
 const technicalAnswerSchema = new mongoose.Schema({
+  assignmentId: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+    ref: "Assignment", // Reference to the Assignment model
+  },
   questionIndex: {
     type: Number,
     required: false,
