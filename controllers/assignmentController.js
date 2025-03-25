@@ -206,6 +206,7 @@ const updateAssignment = asyncHandler(async (req, res) => {
       technicalQuestion_ar: technicalQuestion.technicalQuestion_ar || "", // Arabic question
       correctAnswer: technicalQuestion.correctAnswer || "", // English correct answer
       correctAnswer_ar: technicalQuestion.correctAnswer_ar || "", // Arabic correct answer
+      correctCode: technicalQuestion.correctCode || "", // English correct code
     }));
   }
   // Update questions if provided
@@ -233,7 +234,7 @@ const updateAssignment = asyncHandler(async (req, res) => {
   res.status(200).json(assignment);
 });
 
-// Send assignment score
+// Send choice assignment score
 const sendAssignment = asyncHandler(async (req, res) => {
   const assignmentId = req.params.assignmentId;
   const { userId, userName, userPhoto, score, totalQuestions, answers } = req.body;
@@ -302,7 +303,7 @@ const sendAssignment = asyncHandler(async (req, res) => {
   }
 });
 
-// Send technical assignment code
+// Send technical assignment score
 const sendTechnicalAssignment = asyncHandler(async (req, res) => {
   const { assignmentId } = req.params; // Extract assignmentId from URL params
   const { userId, userName, userPhoto, technicalScore, totalQuestions, technicalAnswers } = req.body; // Extract userId and code from request body
@@ -340,9 +341,10 @@ const sendTechnicalAssignment = asyncHandler(async (req, res) => {
     const validatedAnswers = parsedAnswers.map((technicalAnswer) => ({
       assignmentId: assignmentId,
       questionIndex: technicalAnswer.questionIndex,
-      isCorrect: technicalAnswer.isCorrect !== undefined ? technicalAnswer.isCorrect : false,
       technicalAnswer: technicalAnswer.technicalAnswer,
+      codeAnswer: technicalAnswer.codeAnswer,
       language: technicalAnswer.language,
+      isCorrect: technicalAnswer.isCorrect !== undefined ? technicalAnswer.isCorrect : false,
     }));
 
     // Create a technical code object

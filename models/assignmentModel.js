@@ -106,6 +106,14 @@ const technicalQuestionsSchema = new mongoose.Schema({
     type: String,
     required: false,
   },
+  correctAnswer_ar: {
+    type: String,
+    required: false,
+  },
+  correctCode: {
+    type: String,
+    required: false,
+  },
 });
 
 //technicalAnswerSchema
@@ -119,16 +127,20 @@ const technicalAnswerSchema = new mongoose.Schema({
     type: Number,
     required: false,
   },
-  isCorrect: {
-    type: Boolean,
+  technicalAnswer: {
+    type: String,
     required: false,
   },
-  technicalAnswer: {
+  codeAnswer: {
     type: String,
     required: false,
   },
   language: {
     type: String,
+    required: false,
+  },
+  isCorrect: {
+    type: Boolean,
     required: false,
   },
   createdAt: {
