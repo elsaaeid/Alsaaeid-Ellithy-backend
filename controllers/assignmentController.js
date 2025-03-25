@@ -344,7 +344,8 @@ const sendTechnicalAssignment = asyncHandler(async (req, res) => {
       technicalAnswer: technicalAnswer.technicalAnswer,
       codeAnswer: technicalAnswer.codeAnswer,
       language: technicalAnswer.language,
-      isCorrect: technicalAnswer.isCorrect !== undefined ? technicalAnswer.isCorrect : false,
+      answerIsCorrect: technicalAnswer.answerIsCorrect !== undefined ? technicalAnswer.answerIsCorrect : false,
+      codeIsCorrect: technicalAnswer.codeIsCorrect !== undefined ? technicalAnswer.codeIsCorrect : false,
     }));
 
     // Create a technical code object

@@ -139,7 +139,11 @@ const technicalAnswerSchema = new mongoose.Schema({
     type: String,
     required: false,
   },
-  isCorrect: {
+  answerIsCorrect: {
+    type: Boolean,
+    required: false,
+  },
+  codeIsCorrect: {
     type: Boolean,
     required: false,
   },
