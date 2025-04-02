@@ -215,26 +215,29 @@ const updateBlog = asyncHandler(async (req, res) => {
         return res.status(401).json({ message: "User not authorized" });
     }
 
-    // Handle image upload
-    let fileData = {};
-    if (req.file) {
-        let uploadedFile;
-        try {
-            uploadedFile = await cloudinary.uploader.upload(req.file.path, {
-                folder: "Portfolio React",
-                resource_type: "image",
-            });
-        } catch (error) {
-            return res.status(500).json({ message: "Image could not be uploaded" });
-        }
-
-        fileData = {
-            fileName: req.file.originalname,
-            filePath: uploadedFile.secure_url,
-            fileType: req.file.mimetype,
-            fileSize: fileSizeFormatter(req.file.size, 2),
-        };
+  // Handle Image upload
+  let imageFileData = {};
+  if (req.files && req.files.image) {
+    // Save image to Cloudinary
+    let uploadedFile;
+    try {
+      uploadedFile = await cloudinary.uploader.upload(req.files.image[0].path, {
+        folder: "Portfolio React",
+        resource_type: "image",
+      });
+    } catch (error) {
+      res.status(500);
+      throw new Error("Image could not be uploaded");
     }
+
+    imageFileData = {
+      fileName: req.files.image[0].originalname,
+      filePath: uploadedFile.secure_url,
+      fileType: req.files.image[0].mimetype,
+      fileSize: fileSizeFormatter(req.files.image[0].size, 2),
+    };
+  }
+
 
     // Prepare update data
     const updateData = {
@@ -248,7 +251,7 @@ const updateBlog = asyncHandler(async (req, res) => {
         tags_ar: JSON.parse(tags_ar), 
         code,
         language,
-        image: Object.keys(fileData).length === 0 ? blog.image : fileData,
+        image: Object.keys(imageFileData).length === 0 ? blog.image : imageFileData,
     };
 
     // Update blogItems if provided
