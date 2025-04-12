@@ -10,7 +10,7 @@ const blogRoute = require("./routes/blogRoute");
 const certificateRoute = require("./routes/certificateRoute");
 const taskRoute = require("./routes/taskRoute");
 const assignmentRoute = require("./routes/assignmentRoute");
-const chatRoute = require("./routes/chatRoute");
+// const chatRoute = require("./routes/chatRoute");
 const errorHandler = require("./middleWare/errorMiddleware");
 const cors = require('cors');
 const cookieParser = require("cookie-parser");
@@ -56,7 +56,7 @@ app.use("/api/blogs", blogRoute);
 app.use("/api/certificates", certificateRoute);
 app.use("/api/tasks", taskRoute);
 app.use("/api/assignments", assignmentRoute);
-app.use("/api/chats", chatRoute);
+// app.use("/api/chats", chatRoute);
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 
