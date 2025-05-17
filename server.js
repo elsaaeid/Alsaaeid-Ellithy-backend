@@ -81,10 +81,16 @@ app.get("*", (req, res) => {
 // Error Middleware
 app.use(errorHandler);
 mongoose.set('strictQuery', true);
-mongoose.connect(process.env.DATABASE)
-  .then(() => {
-    app.listen(PORT, () => {
-      console.log(`Server Running on port ${PORT}`);
-    });
-  })
-  .catch((err) => console.log(err));
+// Connect to MongoDB with connection pooling options
+mongoose.connect(process.env.DATABASE, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  minPoolSize: 2,  // Minimum number of connections in the pool
+  maxPoolSize: 10  // Maximum number of connections in the pool
+})
+.then(() => {
+  app.listen(PORT, () => {
+    console.log(`Server Running on port ${PORT}`);
+  });
+})
+.catch((err) => console.log('Database connection error:', err));
