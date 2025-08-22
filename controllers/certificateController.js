@@ -47,7 +47,7 @@ const createCertificate = asyncHandler(async (req, res) => {
 // Get all certificates
 const getCertificates = async (req, res) => {
   try {
-    const certificates = await Certificate.find();
+    const certificates = await Certificate.find().sort({ createdAt: -1 });
     res.json(certificates);
   } catch (error) {
     console.error('Error retrieving certificates:', error);
@@ -59,7 +59,7 @@ const getCertificates = async (req, res) => {
 // Get single Certificate
 const getCertificate = asyncHandler(async (req, res) => {
   const certificate = await Certificate.findById(req.params.id);
-  // if Certificate doesnt exist
+  // if Certificate doesn't exist
   if (!certificate) {
     res.status(404);
     throw new Error("Certificate not found");
@@ -70,7 +70,7 @@ const getCertificate = asyncHandler(async (req, res) => {
 // Delete Certificate
 const deleteCertificate = asyncHandler(async (req, res) => {
   const certificate = await Certificate.findById(req.params.id);
-  // if certificate doesnt exist
+  // if certificate doesn't exist
   if (!certificate) {
     res.status(404);
     throw new Error("Certificate not found");

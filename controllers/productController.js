@@ -93,7 +93,7 @@ const createProduct = asyncHandler(async (req, res) => {
 // Get all Products
 const getProducts = async (req, res) => {
   try {
-    const products = await Product.find().populate('likedBy');
+    const products = await Product.find().populate('likedBy').sort({ createdAt: -1 });
     res.json(products);
   } catch (error) {
     console.error('Error retrieving products:', error);
@@ -118,7 +118,7 @@ const getRelatedProducts = asyncHandler(async (req, res) => {
       }
 
       // Fetch related products by category
-      const products = await Product.find({ category }).limit(5); // Fetch related products
+      const products = await Product.find({ category }).limit(5).sort({ createdAt: -1 }); // Fetch related products
 
       // Filter out products with the same name as the found product
       const filteredProducts = products.filter(product => product.name !== foundProduct.name);

@@ -46,7 +46,7 @@ const createVideo = asyncHandler(async (req, res) => {
 // Get all videos
 const getVideos = async (req, res) => {
   try {
-    const videos = await Video.find().populate('likedBy');
+    const videos = await Video.find().populate('likedBy').sort({ createdAt: -1 });
     res.json(videos);
   } catch (error) {
     console.error('Error retrieving videos:', error);
@@ -72,7 +72,7 @@ const getRelatedVideos = asyncHandler(async (req, res) => {
       }
 
       // Fetch related videos by category
-      const videos = await Video.find({ category }).limit(5); // Fetch related videos
+      const videos = await Video.find({ category }).limit(5).sort({ createdAt: -1 }); // Fetch related videos
 
       // Filter out videos with the same name as the found video
       const filteredVideos = videos.filter(video => video.name !== foundVideo.name);

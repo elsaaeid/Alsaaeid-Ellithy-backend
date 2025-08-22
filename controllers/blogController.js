@@ -116,7 +116,7 @@ const createBlog = asyncHandler(async (req, res) => {
 // Get all blogs
 const getBlogs = async (req, res) => {
   try {
-    const blogs = await Blog.find().populate('likedBy');
+    const blogs = await Blog.find().populate('likedBy').sort({ createdAt: -1 });
     res.json(blogs);
   } catch (error) {
     console.error('Error retrieving blogs:', error);
@@ -142,7 +142,7 @@ const getRelatedBlogs = asyncHandler(async (req, res) => {
         }
 
         // Fetch related blogs by category
-        const blogs = await Blog.find({ category }).limit(5); // Fetch related blogs
+        const blogs = await Blog.find({ category }).limit(5).sort({ createdAt: -1 }); // Fetch related blogs
 
         // Filter out blogs with the same name as the found blog
         const filteredBlogs = blogs.filter(blog => blog.name !== foundBlog.name);

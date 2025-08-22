@@ -24,6 +24,7 @@
     "dotenv": "^16.0.2",
     "express": "^4.19.2",
     "express-async-handler": "^1.2.0",
+    "express-handlebars": "^8.0.3",
     "express-session": "^1.18.1",
     "google-auth-library": "^9.0.0",
     "googleapis": "^137.1.0",

@@ -61,12 +61,10 @@ const createAssignment = asyncHandler(async (req, res) => {
   res.status(201).json(assignment);
 });
 
-module.exports = { createAssignment };
-
 // Get all assignments
 const getAssignments = async (req, res) => {
   try {
-    const assignments = await Assignment.find();
+    const assignments = await Assignment.find().sort({ createdAt: -1 });
     res.json(assignments);
   } catch (error) {
     console.error('Error retrieving assignments:', error);
@@ -91,7 +89,7 @@ const getRelatedAssignments = asyncHandler(async (req, res) => {
       }
 
       // Fetch related assignments by category
-      const assignments = await Assignment.find({ category }).limit(5); // Fetch related assignments
+      const assignments = await Assignment.find({ category }).limit(5).sort({ createdAt: -1 }); // Fetch related assignments
 
       // Filter out assignments with the same name as the found assignment
       const filteredAssignments = assignments.filter(assignment => assignment.name !== foundAssignment.name);
