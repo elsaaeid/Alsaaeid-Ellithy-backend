@@ -62,8 +62,8 @@ const commentSchema = new mongoose.Schema({
   replies: [replySchema] // Use the reply schema for replies
 });
 
-// Product Schema
-const productSchema = mongoose.Schema(
+// Project Schema
+const projectSchema = mongoose.Schema(
   {
     user: {
       type: mongoose.Schema.Types.ObjectId,
@@ -151,5 +151,5 @@ const productSchema = mongoose.Schema(
   }
 );
 
-const Product = mongoose.model("Product", productSchema);
-module.exports = Product;
+const Project = mongoose.model("Project", projectSchema);
+module.exports = Project;

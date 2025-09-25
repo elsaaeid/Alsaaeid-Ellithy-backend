@@ -1,10 +1,10 @@
 const asyncHandler = require("express-async-handler");
-const Product = require("../models/productModel");
+const Project = require("../models/projectModel");
 const { fileSizeFormatter } = require("../utils/fileUpload");
 const cloudinary = require("cloudinary").v2;
 
-// Create Product
-const createProduct = asyncHandler(async (req, res) => {
+// Create Project
+const createProject = asyncHandler(async (req, res) => {
   const { 
     name, 
     name_ar, 
@@ -70,8 +70,8 @@ const createProduct = asyncHandler(async (req, res) => {
     };
   }
 
-  // Create Product
-  const product = await Product.create({
+  // Create Project
+  const project = await Project.create({
     user: req.user.id,
     name,
     name_ar, // Include Arabic name
@@ -87,23 +87,23 @@ const createProduct = asyncHandler(async (req, res) => {
     video: videoFileData, // Include video file data if uploaded
   });
 
-  res.status(201).json(product);
+  res.status(201).json(project);
 });
 
-// Get all Products
-const getProducts = async (req, res) => {
+// Get all Projects
+const getProjects = async (req, res) => {
   try {
-    const products = await Product.find().populate('likedBy').sort({ createdAt: -1 });
-    res.json(products);
+    const projects = await Project.find().populate('likedBy').sort({ createdAt: -1 });
+    res.json(projects);
   } catch (error) {
-    console.error('Error retrieving products:', error);
+    console.error('Error retrieving projects:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 };
 
-// Get all related product by category
-const getRelatedProducts = asyncHandler(async (req, res) => {
-  const { category, productId } = req.params; // Destructure category and productId from params
+// Get all related project by category
+const getRelatedProjects = asyncHandler(async (req, res) => {
+  const { category, projectId } = req.params; // Destructure category and projectId from params
 
   // Validate category input
   if (!category) {
@@ -111,64 +111,64 @@ const getRelatedProducts = asyncHandler(async (req, res) => {
   }
 
   try {
-      // Fetch the product that matches the productId to compare names
-      const foundProduct = await Product.findById(productId);
-      if (!foundProduct) {
-          return res.status(404).json({ message: "Product not found" });
+      // Fetch the project that matches the projectId to compare names
+      const foundProject = await Project.findById(projectId);
+      if (!foundProject) {
+          return res.status(404).json({ message: "Project not found" });
       }
 
-      // Fetch related products by category
-      const products = await Product.find({ category }).limit(5).sort({ createdAt: -1 }); // Fetch related products
+      // Fetch related projects by category
+      const projects = await Project.find({ category }).limit(5).sort({ createdAt: -1 }); // Fetch related projects
 
-      // Filter out products with the same name as the found product
-      const filteredProducts = products.filter(product => product.name !== foundProduct.name);
+      // Filter out projects with the same name as the found project
+      const filteredProjects = projects.filter(project => project.name !== foundProject.name);
 
-      // if (!filteredProducts.length) {
-      //     return res.status(404).json({ message: "No related products found" });
+      // if (!filteredProjects.length) {
+      //     return res.status(404).json({ message: "No related projects found" });
       // }
 
-      res.status(200).json(filteredProducts); // Return the filtered products
+      res.status(200).json(filteredProjects); // Return the filtered projects
   } catch (err) {
       res.status(500).json({ message: "Server error", error: err.message });
   }
 });
 
-// Get single product
-const getProduct = asyncHandler(async (req, res) => {
-  const product = await Product.findById(req.params.id);
-  // if product doesn't exist
-  if (!product) {
+// Get single project
+const getProject = asyncHandler(async (req, res) => {
+  const project = await Project.findById(req.params.id);
+  // if project doesn't exist
+  if (!project) {
     res.status(404);
-    throw new Error("Product not found");
+    throw new Error("Project not found");
   }
-  // Match product to its user
-  // if (product.user.toString() !== req.user.id) {
+  // Match project to its user
+  // if (project.user.toString() !== req.user.id) {
   //   res.status(401);
   //   throw new Error("User not authorized");
   // }
-  res.status(200).json(product);
+  res.status(200).json(project);
 });
 
-// Delete Product
-const deleteProduct = asyncHandler(async (req, res) => {
-  const product = await Product.findById(req.params.id);
-  // if product doesnt exist
-  if (!product) {
+// Delete Project
+const deleteProject = asyncHandler(async (req, res) => {
+  const project = await Project.findById(req.params.id);
+  // if project doesnt exist
+  if (!project) {
     res.status(404);
-    throw new Error("Product not found");
+    throw new Error("Project not found");
   }
-  // Match product to its user
-  if (product.user.toString() !== req.user.id) {
+  // Match project to its user
+  if (project.user.toString() !== req.user.id) {
     res.status(401);
     throw new Error("User not authorized");
   }
-  await product.remove();
-  res.status(200).json({ message: "Product deleted." });
+  await project.remove();
+  res.status(200).json({ message: "Project deleted." });
 });
 
-// Update Product
-const updateProduct = asyncHandler(async (req, res) => {
-  const {       
+// Update Project
+const updateProject = asyncHandler(async (req, res) => {
+  const {
     name, 
     name_ar, // Arabic name
     category, 
@@ -182,16 +182,16 @@ const updateProduct = asyncHandler(async (req, res) => {
   
   const { id } = req.params;
 
-  const product = await Product.findById(id);
+  const project = await Project.findById(id);
 
-  // If product doesn't exist
-  if (!product) {
+  // If project doesn't exist
+  if (!project) {
     res.status(404);
-    throw new Error("Product not found");
+    throw new Error("Project not found");
   }
 
-  // Match product to its user
-  if (product.user.toString() !== req.user.id) {
+  // Match project to its user
+  if (project.user.toString() !== req.user.id) {
     res.status(401);
     throw new Error("User not authorized");
   }
@@ -242,8 +242,8 @@ const updateProduct = asyncHandler(async (req, res) => {
     };
   }
 
-  // Update Product
-  const updatedProduct = await Product.findByIdAndUpdate(
+  // Update Project
+  const updatedProject = await Project.findByIdAndUpdate(
     id, // Use id directly instead of an object
     {
       name,
@@ -255,8 +255,8 @@ const updateProduct = asyncHandler(async (req, res) => {
       description_ar, // Include Arabic description
       tags: JSON.parse(tags),
       tags_ar: JSON.parse(tags_ar),
-      image: Object.keys(imageFileData).length === 0 ? product.image : imageFileData,
-      video: Object.keys(videoFileData).length === 0 ? product.video : videoFileData,
+      image: Object.keys(imageFileData).length === 0 ? project.image : imageFileData,
+      video: Object.keys(videoFileData).length === 0 ? project.video : videoFileData,
     },
     {
       new: true,
@@ -264,35 +264,35 @@ const updateProduct = asyncHandler(async (req, res) => {
     }
   );
 
-  res.status(200).json(updatedProduct);
+  res.status(200).json(updatedProject);
 });
 
 
-// Function to like a item post
+// Function to like a project post
 const likeItem = async (req, res) => {
-  const { itemId } = req.params;
+  const { projectId } = req.params;
   const userId = req.user._id; // Assuming req.user is set by the protect middleware
 
   try {
-      // Find the item post by ID
-      const item = await Product.findById(itemId);
-      if (!item) {
-          return res.status(404).json({ message: 'Item not found' });
+      // Find the project post by ID
+      const project = await Project.findById(projectId);
+      if (!project) {
+          return res.status(404).json({ message: 'Project not found' });
       }
 
-      // Check if the user has already liked the item
-      if (item.likedBy.includes(userId)) {
-          return res.status(400).json({ message: 'You have already liked this item' });
+      // Check if the user has already liked the project
+      if (project.likedBy.includes(userId)) {
+          return res.status(400).json({ message: 'You have already liked this project' });
       }
 
       // Add the user to the likedBy array
-      item.likedBy.push(userId); // Add the user ID to the array
-      item.likeCount += 1; // Increment the like count
-      await item.save(); // Save the updated item post
+      project.likedBy.push(userId); // Add the user ID to the array
+      project.likeCount += 1; // Increment the like count
+      await project.save(); // Save the updated project post
 
-      return res.status(200).json({ message: 'Item liked successfully', likeCount: item.likeCount });
+      return res.status(200).json({ message: 'Project liked successfully', likeCount: project.likeCount });
   } catch (error) {
-      console.error('Error liking item:', error);
+      console.error('Error liking project:', error);
       return res.status(500).json({ message: 'Server error', error: error.message });
   }
 };
@@ -305,7 +305,7 @@ const unlikeItem = async (req, res) => {
 
   try {
       // Find the item post by ID
-      const item = await Product.findById(itemId);
+      const item = await Project.findById(itemId);
       if (!item) {
           return res.status(404).json({ message: 'Item not found' });
       }
@@ -351,7 +351,7 @@ const commentItem = async (req, res) => {
   }
 
   // Find the item post by ID
-  const item = await Product.findById(itemId);
+  const item = await Project.findById(itemId);
   if (!item) {
       return res.status(404).json({ message: "Item post not found." });
   }
@@ -390,7 +390,7 @@ const replyItem = async (req, res) => {
 
   try {
       // Find the item post by ID
-      const item = await Product.findById(itemId);
+      const item = await Project.findById(itemId);
       if (!item) {
           return res.status(404).json({ message: 'Item not found.' });
       }
@@ -442,14 +442,14 @@ const editComment = async (req, res) => {
       return res.status(400).json({ message: "Invalid comment ID format." });
   }
 
-  // Find the item post that contains the comment
-  const item = await Product.findOne({ "comments._id": commentId });
-  if (!item) {
+  // Find the project post that contains the comment
+  const project = await Project.findOne({ "comments._id": commentId });
+  if (!project) {
       return res.status(404).json({ message: "Comment not found." });
   }
 
   // Find the comment to edit
-  const commentToEdit = item.comments.id(commentId);
+  const commentToEdit = project.comments.id(commentId);
   if (!commentToEdit) {
       return res.status(404).json({ message: "Comment not found." });
   }
@@ -477,14 +477,14 @@ const deleteComment = async (req, res) => {
       return res.status(400).json({ message: "Invalid comment ID format." });
   }
 
-  // Attempt to find the item and remove the comment
-  const item = await Product.findOneAndUpdate(
-      { "comments._id": commentId }, // Find item with the comment
+  // Attempt to find the project and remove the comment
+  const project = await Project.findOneAndUpdate(
+      { "comments._id": commentId }, // Find project with the comment
       { $pull: { comments: { _id: commentId } } }, // Remove the comment
-      { new: true } // Return the updated item
+      { new: true } // Return the updated project
   );
 
-  // Check if the item was found and updated
+  // Check if the project was found and updated
   if (!item) {
       return res.status(404).json({ message: "Comment not found." });
   }
@@ -494,12 +494,12 @@ const deleteComment = async (req, res) => {
 };
 
 module.exports = {
-  createProduct,
-  getProducts,
-  getRelatedProducts,
-  getProduct,
-  deleteProduct,
-  updateProduct,
+  createProject,
+  getProjects,
+  getRelatedProjects,
+  getProject,
+  deleteProject,
+  updateProject,
   likeItem,
   unlikeItem,
   commentItem,

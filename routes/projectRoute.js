@@ -5,27 +5,27 @@ const {
   protect
 } = require("./authMiddleware");
 const {
-  createProduct,
-  getProducts,
-  getRelatedProducts,
-  getProduct,
-  deleteProduct,
-  updateProduct,
+  createProject,
+  getProjects,
+  getRelatedProjects,
+  getProject,
+  deleteProject,
+  updateProject,
   likeItem,
   unlikeItem,
   commentItem,
   replyItem,
   editComment,
   deleteComment,
-} = require("../controllers/productController");
+} = require("../controllers/projectController");
 const { upload } = require("../utils/fileUpload");
 
-router.post("/", protect, upload.fields([{ name: "image" }, { name: "video" }]), createProduct);
-router.patch("/:id", protect, upload.fields([{ name: "image" }, { name: "video" }]), updateProduct);
-router.get("/", getProducts);
-router.get("/related/:category/:productId", getRelatedProducts);
-router.get("/:id", getProduct);
-router.delete("/:id", protect, deleteProduct);
+router.post("/", protect, upload.fields([{ name: "image" }, { name: "video" }]), createProject);
+router.patch("/:id", protect, upload.fields([{ name: "image" }, { name: "video" }]), updateProject);
+router.get("/", getProjects);
+router.get("/related/:category/:projectId", getRelatedProjects);
+router.get("/:id", getProject);
+router.delete("/:id", protect, deleteProject);
 router.post('/:itemId/like', protect, likeItem);
 router.post('/:itemId/unlike', protect, unlikeItem);
 router.post('/:itemId', protect, commentItem);

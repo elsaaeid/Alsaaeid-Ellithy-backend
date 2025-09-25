@@ -3,7 +3,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const userRoute = require("./routes/userRoute");
-const productRoute = require("./routes/productRoute");
+const projectRoute = require("./routes/projectRoute");
 const videoRoute = require("./routes/videoRoute");
 const contactRoute = require("./routes/contactRoute");
 const blogRoute = require("./routes/blogRoute");
@@ -49,7 +49,7 @@ app.use(cors({
 app.use(express.json()); // This makes sure Express can parse JSON bodies
 // Routes Middleware
 app.use("/api/users", userRoute);
-app.use("/api/products", productRoute);
+app.use("/api/projects", projectRoute);
 app.use("/api/contactus", contactRoute);
 app.use("/api/videos", videoRoute);
 app.use("/api/blogs", blogRoute);
