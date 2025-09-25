@@ -1,5 +1,4 @@
 const fs = require('fs');
-const { TextToSpeechClient } = require('@google-cloud/text-to-speech');
 const { Project } = require('../models/projectModel');
 const { detectLanguage } = require('./translatorController'); // Import detectLanguage function
 const { translateText } = require('./translatorController'); // Import translation function
