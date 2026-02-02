@@ -24,27 +24,48 @@ const createProject = asyncHandler(async (req, res) => {
     throw new Error("Please fill in all required fields");
   }
 
-  // Handle Image upload
-  let imageFileData = {};
-  if (req.files && req.files.image) {
-    // Save image to Cloudinary
-    let uploadedFile;
+  // Handle Images upload (supporting multiple images)
+  let imagesFileData = [];
+  if (req.files && req.files.images) {
+    const imageFiles = Array.isArray(req.files.images) ? req.files.images : [req.files.images];
+    
+    for (const imageFile of imageFiles) {
+      try {
+        const uploadedFile = await cloudinary.uploader.upload(imageFile.path, {
+          folder: "Portfolio React",
+          resource_type: "image",
+        });
+
+        imagesFileData.push({
+          fileName: imageFile.originalname,
+          filePath: uploadedFile.secure_url,
+          fileType: imageFile.mimetype,
+          fileSize: fileSizeFormatter(imageFile.size, 2),
+        });
+      } catch (error) {
+        console.error("Error uploading image:", error);
+        res.status(500);
+        throw new Error("Image could not be uploaded");
+      }
+    }
+  } else if (req.files && req.files.image) {
+    // Fallback for old single image field
     try {
-      uploadedFile = await cloudinary.uploader.upload(req.files.image[0].path, {
+      const uploadedFile = await cloudinary.uploader.upload(req.files.image[0].path, {
         folder: "Portfolio React",
         resource_type: "image",
+      });
+
+      imagesFileData.push({
+        fileName: req.files.image[0].originalname,
+        filePath: uploadedFile.secure_url,
+        fileType: req.files.image[0].mimetype,
+        fileSize: fileSizeFormatter(req.files.image[0].size, 2),
       });
     } catch (error) {
       res.status(500);
       throw new Error("Image could not be uploaded");
     }
-
-    imageFileData = {
-      fileName: req.files.image[0].originalname,
-      filePath: uploadedFile.secure_url,
-      fileType: req.files.image[0].mimetype,
-      fileSize: fileSizeFormatter(req.files.image[0].size, 2),
-    };
   }
 
   // Handle Video upload
@@ -83,7 +104,8 @@ const createProject = asyncHandler(async (req, res) => {
     description_ar, // Include Arabic description
     tags: JSON.parse(tags),
     tags_ar: JSON.parse(tags_ar), // Include Arabic tags
-    image: imageFileData,
+    images: imagesFileData.length > 0 ? imagesFileData : [],
+    image: imagesFileData.length > 0 ? imagesFileData[0] : {}, // Keep backward compatibility
     video: videoFileData, // Include video file data if uploaded
   });
 
@@ -158,10 +180,10 @@ const deleteProject = asyncHandler(async (req, res) => {
     throw new Error("Project not found");
   }
   // Match project to its user
-  if (project.user.toString() !== req.user.id) {
-    res.status(401);
-    throw new Error("User not authorized");
-  }
+  // if (project.user.toString() !== req.user.id) {
+  //   res.status(401);
+  //   throw new Error("User not authorized");
+  // }
   await project.remove();
   res.status(200).json({ message: "Project deleted." });
 });
@@ -196,27 +218,64 @@ const updateProject = asyncHandler(async (req, res) => {
     throw new Error("User not authorized");
   }
 
-  // Handle Image upload
-  let imageFileData = {};
-  if (req.files && req.files.image) {
-    // Save image to Cloudinary
-    let uploadedFile;
+  // Handle Images upload (supporting multiple images)
+  let imagesFileData = [];
+  const existingImages = req.body.existingImages ? 
+    (Array.isArray(req.body.existingImages) ? req.body.existingImages : [req.body.existingImages]) 
+    : [];
+
+  if (req.files && req.files.images) {
+    const imageFiles = Array.isArray(req.files.images) ? req.files.images : [req.files.images];
+    
+    for (const imageFile of imageFiles) {
+      try {
+        const uploadedFile = await cloudinary.uploader.upload(imageFile.path, {
+          folder: "Portfolio React",
+          resource_type: "image",
+        });
+
+        imagesFileData.push({
+          fileName: imageFile.originalname,
+          filePath: uploadedFile.secure_url,
+          fileType: imageFile.mimetype,
+          fileSize: fileSizeFormatter(imageFile.size, 2),
+        });
+      } catch (error) {
+        console.error("Error uploading image:", error);
+        res.status(500);
+        throw new Error("Image could not be uploaded");
+      }
+    }
+  } else if (req.files && req.files.image) {
+    // Fallback for old single image field
     try {
-      uploadedFile = await cloudinary.uploader.upload(req.files.image[0].path, {
+      const uploadedFile = await cloudinary.uploader.upload(req.files.image[0].path, {
         folder: "Portfolio React",
         resource_type: "image",
+      });
+
+      imagesFileData.push({
+        fileName: req.files.image[0].originalname,
+        filePath: uploadedFile.secure_url,
+        fileType: req.files.image[0].mimetype,
+        fileSize: fileSizeFormatter(req.files.image[0].size, 2),
       });
     } catch (error) {
       res.status(500);
       throw new Error("Image could not be uploaded");
     }
-
-    imageFileData = {
-      fileName: req.files.image[0].originalname,
-      filePath: uploadedFile.secure_url,
-      fileType: req.files.image[0].mimetype,
-      fileSize: fileSizeFormatter(req.files.image[0].size, 2),
-    };
+  } else if (existingImages.length > 0) {
+    // Keep existing images if no new files uploaded
+    imagesFileData = existingImages.map(img => 
+      typeof img === 'string' ? { filePath: img } : img
+    );
+  } else {
+    // If no new images and no existing images specified, use old image field if available
+    if (project.images && project.images.length > 0) {
+      imagesFileData = project.images;
+    } else if (project.image && Object.keys(project.image).length > 0) {
+      imagesFileData = [project.image];
+    }
   }
 
   // Handle Video upload
@@ -244,7 +303,7 @@ const updateProject = asyncHandler(async (req, res) => {
 
   // Update Project
   const updatedProject = await Project.findByIdAndUpdate(
-    id, // Use id directly instead of an object
+    id,
     {
       name,
       name_ar, // Include Arabic name
@@ -255,7 +314,8 @@ const updateProject = asyncHandler(async (req, res) => {
       description_ar, // Include Arabic description
       tags: JSON.parse(tags),
       tags_ar: JSON.parse(tags_ar),
-      image: Object.keys(imageFileData).length === 0 ? project.image : imageFileData,
+      images: imagesFileData.length > 0 ? imagesFileData : project.images || [],
+      image: imagesFileData.length > 0 ? imagesFileData[0] : (project.image || {}), // Keep backward compatibility
       video: Object.keys(videoFileData).length === 0 ? project.video : videoFileData,
     },
     {

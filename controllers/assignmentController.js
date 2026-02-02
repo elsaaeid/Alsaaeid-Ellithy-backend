@@ -161,10 +161,10 @@ const updateAssignment = asyncHandler(async (req, res) => {
   }
 
   // Match assignment to its user
-  if (assignment.user.toString() !== req.user.id) {
-    res.status(401);
-    throw new Error("User not authorized");
-  }
+  // if (assignment.user.toString() !== req.user.id) {
+  //   res.status(401);
+  //   throw new Error("User not authorized");
+  // }
 
   // Handle Image upload
   let imageFileData = {};

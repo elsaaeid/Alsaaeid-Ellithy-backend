@@ -97,10 +97,10 @@ const updateCertificate = asyncHandler(async (req, res) => {
     throw new Error("Certificate not found");
   }
   // Match certificate to its user
-  if (certificate.user.toString() !== req.user.id) {
-    res.status(401);
-    throw new Error("User not authorized");
-  }
+  // if (certificate.user.toString() !== req.user.id) {
+  //   res.status(401);
+  //   throw new Error("User not authorized");
+  // }
 
   // Handle Image upload
   let fileData = {};

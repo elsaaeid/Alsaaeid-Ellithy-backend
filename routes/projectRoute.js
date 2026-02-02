@@ -20,8 +20,8 @@ const {
 } = require("../controllers/projectController");
 const { upload } = require("../utils/fileUpload");
 
-router.post("/", protect, upload.fields([{ name: "image" }, { name: "video" }]), createProject);
-router.patch("/:id", protect, upload.fields([{ name: "image" }, { name: "video" }]), updateProject);
+router.post("/", protect, upload.fields([{ name: "images", maxCount: 10 }, { name: "image" }, { name: "video" }]), createProject);
+router.patch("/:id", protect, upload.fields([{ name: "images", maxCount: 10 }, { name: "image" }, { name: "video" }]), updateProject);
 router.get("/", getProjects);
 router.get("/related/:category/:projectId", getRelatedProjects);
 router.get("/:id", getProject);

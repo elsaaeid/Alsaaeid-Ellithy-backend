@@ -132,6 +132,11 @@ const projectSchema = mongoose.Schema(
       default: {},
       required: false,
     },
+    images: {
+      type: [Object],
+      default: [],
+      required: false,
+    },
     video: {
       type: Object,
       default: {},
