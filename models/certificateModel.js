@@ -13,6 +13,21 @@ const certificateSchema = new mongoose.Schema(
       required: false,
       trim: true,
     },
+    name_ar: {
+      type: String,
+      required: false,
+      trim: true,
+    },
+    description: {
+      type: String,
+      required: false,
+      trim: true,
+    },
+    description_ar: {
+      type: String,
+      required: false,
+      trim: true,
+    },
     sku: {
       type: String,
       required: false,
