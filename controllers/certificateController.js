@@ -8,7 +8,7 @@ const cloudinary = require("cloudinary").v2;
 
 // Create Certificate
 const createCertificate = asyncHandler(async (req, res) => {
-  const { name, name_ar, description, description_ar, sku } = req.body;
+  const { name, name_ar, description, description_ar, sku, date } = req.body;
 
   // Handle Image upload
   let fileData = {};
@@ -42,6 +42,7 @@ const createCertificate = asyncHandler(async (req, res) => {
     description_ar,
     sku,
     image: fileData,
+    date,
   });
 
   res.status(201).json(certificate);
@@ -89,7 +90,7 @@ const deleteCertificate = asyncHandler(async (req, res) => {
 
 // Update certificate
 const updateCertificate = asyncHandler(async (req, res) => {
-  const { name, name_ar, description, description_ar } = req.body;
+  const { name, name_ar, description, description_ar, date } = req.body;
   const { id } = req.params;
 
   const certificate = await Certificate.findById(id);
@@ -137,6 +138,7 @@ const updateCertificate = asyncHandler(async (req, res) => {
       description,
       description_ar,
       image: Object.keys(fileData).length === 0 ? certificate?.image : fileData,
+      date,
     },
     {
       new: true,

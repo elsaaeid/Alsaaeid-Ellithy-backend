@@ -45,6 +45,10 @@ const certificateSchema = new mongoose.Schema(
     updatedAt: {
         type: Date,
         default: Date.now
+    },
+    date: {
+      type: Date,
+      required: false,
     }
   },
   {
